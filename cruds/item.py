@@ -1,8 +1,6 @@
 from typing import Optional
 from enum import Enum
-
 # アイテムのCRUD操作を行うモジュール
-
 
 # アイテムのステータスを表す列挙型
 class ItemStatus(Enum):
@@ -59,7 +57,26 @@ def create(item_create):
         item_create.get("name"),
         item_create.get("price"),
         item_create.get("description"),
-        ItemStatus.ON_SALE,  # 新しいアイテムは販売中がデフォ
+        ItemStatus.ON_SALE,  # 新しいアイテムは販売中がデフォルト
     )
     items.append(new_item)
     return new_item
+
+# アイテムを更新する関数
+def update(id: int, item_update):
+    for item in items:
+        if item.id == id:
+            item.name = item_update.get("name", item.name)
+            item.price = item_update.get("price", item.price)
+            item.description = item_update.get("description", item.description)
+            item.status = item_update.get("status", item.status)
+            return item
+    return None
+
+# アイテムを削除する関数
+def delete(id: int):
+    for item in items:
+        if item.id == id:
+            items.remove(item)
+            return item
+    return None
