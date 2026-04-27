@@ -1,11 +1,7 @@
 from typing import Optional
-from enum import Enum
-# アイテムのCRUD操作を行うモジュール
+from schemas import ItemCreate, ItemStatus, ItemUpdate
 
-# アイテムのステータスを表す列挙型
-class ItemStatus(Enum):
-    ON_SALE = "on_sale"
-    SOLD_OUT = "sold_out"
+# アイテムのCRUD操作を行うモジュール
 
 # アイテムクラス
 class Item:
@@ -51,25 +47,25 @@ def find_by_name(name: str):
     return filtered_items
 
 # アイテムを作成する関数
-def create(item_create):
+def create(item_create: ItemCreate):
     new_item = Item(
         len(items) + 1,  # 新しいIDを生成
-        item_create.get("name"),
-        item_create.get("price"),
-        item_create.get("description"),
+        item_create.name,
+        item_create.price,
+        item_create.description,
         ItemStatus.ON_SALE,  # 新しいアイテムは販売中がデフォルト
     )
     items.append(new_item)
     return new_item
 
 # アイテムを更新する関数
-def update(id: int, item_update):
+def update(id: int, item_update: ItemUpdate):
     for item in items:
         if item.id == id:
-            item.name = item_update.get("name", item.name)
-            item.price = item_update.get("price", item.price)
-            item.description = item_update.get("description", item.description)
-            item.status = item_update.get("status", item.status)
+            item.name = item.name if item_update.name is None else item_update.name
+            item.price = item.price if item_update.price is None else item_update.price
+            item.description = item.description if item_update.description is None else item_update.description
+            item.status = item_update.status if item_update.status is None else item_update.status
             return item
     return None
 
