@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from cruds import item as item_cruds
-from schemas import ItemCreate, ItemUpdate, ItemStatus
+from schemas import ItemCreate, ItemUpdate, ItemStatus, ItemResponse
 
 router = APIRouter(prefix="/items", tags=["items"])
 
 # ルーティング
-@router.get("")
+@router.get("", response_model=list[ItemResponse])
 async def find_all():
     return item_cruds.find_all()
 
